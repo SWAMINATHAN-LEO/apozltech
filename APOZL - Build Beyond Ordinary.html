@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APOZL — Build Beyond Ordinary</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              coral: '#FF4E3E',
+              orange: '#FF8A3D',
+              sunset: '#FF6B4A',
+              dark: '#0F1115',
+              card: '#161920',
+              muted: '#717684'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Syne"', '"Plus Jakarta Sans"', 'sans-serif']
+          },
+          backgroundImage: {
+            'coral-gradient': 'linear-gradient(135deg, #FF4E3E 0%, #FF9040 100%)',
+            'sunset-glow': 'linear-gradient(180deg, rgba(255, 78, 62, 0.15) 0%, rgba(255, 144, 64, 0) 100%)',
+            'radial-glow': 'radial-gradient(circle at 50% 50%, rgba(255, 78, 62, 0.12) 0%, transparent 70%)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .brand-glow {
+      text-shadow: 0 0 25px rgba(255, 78, 62, 0.45);
+    }
+    
+    .floating-doodle {
+      animation: float 6s ease-in-out infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+    .floating-doodle-slow {
+      animation: float-rev 8s ease-in-out infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+    @keyframes float-rev {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(8px) rotate(-3deg); }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0d0f14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2d36;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FF4E3E;
+    }
+
+    /* Modal Backdrop Blur */
+    .glass-backdrop {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-[#0b0c10] text-[#E8ECF2] font-sans antialiased selection:bg-brand-coral selection:text-white overflow-x-hidden min-h-screen">
+
+  <!-- Header / Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-[#0b0c10]/85 glass-backdrop border-b border-white/5 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between relative">
+      
+      <!-- Left Controls (Mobile Menu Toggle & Nav items) -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="p-2.5 rounded-xl border border-white/10 hover:border-brand-coral/60 text-white/80 hover:text-white hover:bg-white/5 transition-all">
+          <i class="fa-solid fa-bars-staggered text-lg"></i>
+        </button>
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-white/70">
+          <a href="#about" class="hover:text-brand-coral transition-colors">About</a>
+          <a href="#services" class="hover:text-brand-coral transition-colors">Services</a>
+          <a href="#works" class="hover:text-brand-coral transition-colors">Works</a>
+        </nav>
+      </div>
+
+      <!-- CENTER BRAND LOGO & NAME (Faithful to wireframe centered spec) -->
+      <a href="#" class="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2 group">
+        <div class="w-8 h-8 rounded-lg bg-coral-gradient flex items-center justify-center font-display font-black text-white text-lg shadow-lg shadow-brand-coral/30 group-hover:scale-105 transition-transform">
+          A
+        </div>
+        <div class="font-display font-black tracking-wider text-xl sm:text-2xl text-white">
+          AP<span class="text-brand-coral">OZL</span>
+        </div>
+      </a>
+
+      <!-- Right Controls (Profile, Quick Verification & Theme/CTA) -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-white/70">
+          <a href="#game" class="hover:text-brand-coral transition-colors">Play Arcade</a>
+          <a href="#verify" class="hover:text-brand-coral transition-colors">Verify</a>
+          <a href="#faq" class="hover:text-brand-coral transition-colors">FAQ</a>
+        </nav>
+        <button id="profileModalBtn" aria-label="Account and contact" class="w-10 h-10 rounded-full border border-white/10 hover:border-brand-coral flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-brand-coral/10 transition-all">
+          <i class="fa-regular fa-user text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Nav -->
+    <div id="mobileDrawer" class="hidden md:hidden border-t border-white/5 bg-[#101218] px-6 py-5 flex flex-col space-y-4">
+      <a href="#about" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">About Us</a>
+      <a href="#services" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">Our Services</a>
+      <a href="#works" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">Our Works</a>
+      <a href="#game" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">Interactive Arcade Game</a>
+      <a href="#team" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">Meet Our Team</a>
+      <a href="#verify" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">Certificate Verification</a>
+      <a href="#faq" class="mobile-link text-white/80 hover:text-brand-coral font-medium py-1">FAQs</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden bg-radial-glow">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 relative text-center">
+      
+      <!-- Floating Doodles matching wireframe drawings (light tech & creative sketches) -->
+      <div class="floating-doodle absolute -top-4 left-6 sm:left-12 opacity-40 text-brand-coral text-2xl">
+        <i class="fa-solid fa-atom"></i>
+      </div>
+      <div class="floating-doodle-slow absolute top-8 left-1/4 opacity-30 text-white text-xl">
+        <i class="fa-regular fa-lightbulb"></i>
+      </div>
+      <div class="floating-doodle absolute -top-2 right-12 opacity-40 text-white text-2xl">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <div class="floating-doodle-slow absolute top-12 right-1/4 opacity-30 text-brand-orange text-xl">
+        <i class="fa-solid fa-heart"></i>
+      </div>
+      <div class="floating-doodle absolute bottom-12 left-10 opacity-30 text-brand-orange text-xl">
+        <i class="fa-solid fa-pen-nib"></i>
+      </div>
+      <div class="floating-doodle-slow absolute bottom-6 right-10 opacity-35 text-white text-2xl">
+        <i class="fa-solid fa-code"></i>
+      </div>
+      <div class="floating-doodle absolute bottom-0 left-1/3 opacity-30 text-brand-coral text-xl">
+        <i class="fa-solid fa-cube"></i>
+      </div>
+      <div class="floating-doodle-slow absolute bottom-4 right-1/3 opacity-25 text-white text-lg">
+        <i class="fa-solid fa-gear"></i>
+      </div>
+
+      <!-- Core Hero Text -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-brand-coral mb-6">
+        <span class="w-2 h-2 rounded-full bg-brand-coral animate-ping"></span>
+        Next-Gen Engineering & Design
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-display font-black tracking-tight leading-[1.1] mb-6">
+        BUILD<br>
+        <span class="bg-coral-gradient bg-clip-text text-transparent brand-glow">BEYOND</span><br>
+        ORDINARY
+      </h1>
+
+      <p class="max-w-xl mx-auto text-white/60 text-base sm:text-lg mb-8 leading-relaxed">
+        Pioneering software ecosystems, embedded robotics, and automated systems for companies striving to lead industries tomorrow.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="#services" class="px-8 py-3.5 rounded-2xl bg-coral-gradient hover:opacity-95 text-white font-semibold shadow-lg shadow-brand-coral/30 hover:shadow-brand-coral/50 transition-all hover:-translate-y-0.5 active:translate-y-0">
+          Explore Solutions
+        </a>
+        <a href="#game" class="px-6 py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold border border-white/10 transition-all flex items-center gap-2">
+          <i class="fa-solid fa-gamepad text-brand-coral"></i>
+          Play Mini Arcade
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about" class="py-16 sm:py-24 border-t border-white/5 bg-[#0e1015]/60 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title -->
+      <div class="mb-10">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white uppercase">
+          ABOUT <span class="text-brand-coral">US</span>
+        </h2>
+        <div class="w-12 h-1 bg-coral-gradient rounded-full mt-2"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Text Column -->
+        <div class="lg:col-span-7 space-y-5 text-white/75 text-base sm:text-lg leading-relaxed">
+          <p class="font-medium text-white text-xl">
+            We are architects of modern computing, building high-impact intelligence where human ingenuity meets machine execution.
+          </p>
+          <p>
+            At <strong class="text-white">APOZL</strong>, we engineer tailored software architectures, agile robotic control software, and adaptive enterprise workflows that transform raw potential into scalable competitive advantage.
+          </p>
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/10">
+            <div>
+              <div class="text-2xl sm:text-3xl font-display font-black text-brand-coral">99.8%</div>
+              <div class="text-xs text-white/50 mt-1 uppercase">Reliability Rate</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-display font-black text-brand-orange">45+</div>
+              <div class="text-xs text-white/50 mt-1 uppercase">Shipped Deployments</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-display font-black text-white">24/7</div>
+              <div class="text-xs text-white/50 mt-1 uppercase">Autonomous Ops</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Card from Wireframe -->
+        <div class="lg:col-span-5">
+          <div class="relative group cursor-pointer aspect-[4/3] rounded-3xl bg-coral-gradient p-1 shadow-2xl shadow-brand-coral/25 overflow-hidden transition-all duration-300 hover:scale-[1.02]" id="videoThumbnailCard">
+            <div class="w-full h-full rounded-[22px] bg-gradient-to-tr from-brand-coral via-[#FF7A45] to-[#FFA050] flex flex-col items-center justify-center relative overflow-hidden">
+              <!-- Decorative subtle rings -->
+              <div class="absolute w-44 h-44 rounded-full border border-white/20 animate-ping opacity-25"></div>
+              <div class="absolute w-32 h-32 rounded-full border border-white/30"></div>
+              
+              <!-- Play Button matching wireframe -->
+              <button aria-label="Play promotional introduction video" class="relative z-10 w-16 h-16 rounded-full bg-white text-brand-coral flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play text-xl ml-1"></i>
+              </button>
+              <span class="relative z-10 mt-3 font-semibold text-xs tracking-wider uppercase text-white/90">Watch Showreel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Modal -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 glass-backdrop">
+    <div class="bg-[#141720] border border-white/10 rounded-2xl max-w-2xl w-full p-4 relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+        <h4 class="font-display font-bold text-white text-lg">APOZL Showreel & Philosophy</h4>
+        <button id="closeVideoBtn" class="w-8 h-8 rounded-full hover:bg-white/10 text-white/70 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="aspect-video w-full rounded-xl bg-black/90 flex flex-col items-center justify-center text-center p-6 border border-white/5">
+        <div class="w-16 h-16 rounded-2xl bg-coral-gradient flex items-center justify-center text-white text-2xl mb-4">
+          <i class="fa-solid fa-film"></i>
+        </div>
+        <p class="text-white font-medium mb-1">APOZL Vision: Autonomous Future 2026</p>
+        <p class="text-xs text-white/50 max-w-sm">High-speed robotic telemetry, software orchestration, and responsive cloud interfaces built beyond limits.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUR SERVICES SECTION -->
+  <section id="services" class="py-16 sm:py-24 border-t border-white/5 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title Matching Wireframe -->
+      <div class="mb-10">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white uppercase">
+          OUR <span class="text-brand-coral">SERVICES</span>
+        </h2>
+        <div class="w-12 h-1 bg-coral-gradient rounded-full mt-2"></div>
+      </div>
+
+      <!-- Services Grid: Robotics, Softwares, Automation -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        
+        <!-- Card 1: Robotics -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80" 
+              alt="Robotics engineering arm" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=Robotics+Systems'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-coral/20 border border-brand-coral/40 text-brand-coral backdrop-blur-md">Hardware + AI</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">Robotics</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                Industrial robotic integration, ROS-driven manipulators, sensor telemetry, and embedded edge compute control systems.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-brand-coral">
+              <span>Smart Kinematics</span>
+              <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Softwares -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" 
+              alt="Software development code" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=Software+Architecture'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-coral/20 border border-brand-coral/40 text-brand-coral backdrop-blur-md">Cloud & Web</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">Softwares</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                Full-stack web applications, microservices architecture, cross-platform mobile apps, and robust high-concurrency cloud engines.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-brand-coral">
+              <span>Scalable Stacks</span>
+              <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Automation -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" 
+              alt="Automation circuit and microprocessor" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=Enterprise+Automation'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-coral/20 border border-brand-coral/40 text-brand-coral backdrop-blur-md">Intelligent Ops</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">Automation</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                Intelligent agent workflows, RPA, continuous data ingestion pipelines, and event-driven micro-automations.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-brand-coral">
+              <span>Autonomous Flow</span>
+              <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pill Carousel Indicator matching mockup wireframe pill -->
+      <div class="flex justify-center items-center mt-6">
+        <div class="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center space-x-2 text-[10px] text-white/50 tracking-widest font-mono uppercase">
+          <span class="w-2 h-1.5 rounded-full bg-brand-coral"></span>
+          <span>1 / 3 Systems Active</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OUR WORKS SECTION (Header right-aligned style matching mockup) -->
+  <section id="works" class="py-16 sm:py-24 border-t border-white/5 bg-[#0e1015]/60 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title Matching Wireframe Layout (Right aligned header) -->
+      <div class="mb-10 flex flex-col items-end">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white uppercase text-right">
+          OUR <span class="text-brand-coral">WORKS</span>
+        </h2>
+        <div class="w-12 h-1 bg-coral-gradient rounded-full mt-2"></div>
+      </div>
+
+      <!-- Works Grid: Edtech, Healthcare, NGO -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        
+        <!-- Project 1: Edtech -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80" 
+              alt="Edtech educational student screen" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=EdTech+Platform'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/60 border border-white/20 text-white backdrop-blur-md">Case 01</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">Edtech</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                Interactive real-time spatial learning engine, gamified STEM curricula, and adaptive algorithmic feedback loops.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-white/50">
+              <span class="text-brand-coral font-medium">120K+ Active Learners</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Healthcare -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" 
+              alt="Healthcare diagnostics digital screen" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=Healthcare+Software'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/60 border border-white/20 text-white backdrop-blur-md">Case 02</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">Healthcare</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                HIPAA-compliant surgical monitoring telemetry, diagnostic vision AI assist, and hospital asset tracking network.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-white/50">
+              <span class="text-brand-coral font-medium">99.99% Diagnostic Uptime</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: NGO -->
+        <div class="group relative rounded-3xl bg-[#141720] border border-white/10 overflow-hidden hover:border-brand-coral/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg flex flex-col justify-between">
+          <div class="relative h-48 w-full overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb9?auto=format&fit=crop&w=800&q=80" 
+              alt="Community volunteer aid and NGO impact" 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 brightness-90"
+              onerror="this.src='https://placehold.co/600x400/141720/FF4E3E?text=NGO+Platform'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141720] via-[#141720]/40 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/60 border border-white/20 text-white backdrop-blur-md">Case 03</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-display font-black text-white group-hover:text-brand-coral transition-colors mb-2">NGO</h3>
+              <p class="text-xs text-white/60 leading-relaxed">
+                Decentralized humanitarian donation tracking, relief logistics mapping, and verifiable carbon credit accounts.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-white/50">
+              <span class="text-brand-coral font-medium">$4.2M Distributed Relief</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pill Carousel Indicator -->
+      <div class="flex justify-center items-center mt-6">
+        <div class="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center space-x-2 text-[10px] text-white/50 tracking-widest font-mono uppercase">
+          <span class="w-2 h-1.5 rounded-full bg-brand-coral"></span>
+          <span>Deployments Verified</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE APOZL? & INTERACTIVE SNAKE GAME (Exact wireframe element) -->
+  <section id="game" class="py-16 sm:py-24 border-t border-white/5 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title Matching Wireframe -->
+      <div class="mb-8">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white">
+          Why <span class="text-brand-coral font-serif italic font-normal">Choose</span> Apozl?
+        </h2>
+        <p class="text-xs sm:text-sm text-white/60 mt-1">
+          We engineer with relentless precision and playfulness. Test our agility in this built-in arcade canvas!
+        </p>
+      </div>
+
+      <!-- Snake Game Container Box styled like the orange/coral block in mockup -->
+      <div class="relative rounded-3xl bg-coral-gradient p-1 shadow-2xl shadow-brand-coral/20 overflow-hidden">
+        <div class="bg-gradient-to-br from-[#FF4E3E] via-[#FF6E38] to-[#FF9040] rounded-[22px] p-4 sm:p-8 text-white relative">
+          
+          <!-- Game Header / Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/20">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-bold text-white backdrop-blur-md">
+                <i class="fa-solid fa-gamepad"></i>
+              </div>
+              <div>
+                <h3 class="font-display font-extrabold text-xl sm:text-2xl tracking-wide uppercase leading-tight">Snake Game</h3>
+                <span class="text-xs text-white/80">Embedded Apozl Engine Mini-Challenge</span>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <div class="bg-black/25 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-xs font-mono">
+                SCORE: <span id="snakeScore" class="font-bold text-yellow-300">0</span>
+              </div>
+              <div class="bg-black/25 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-xs font-mono">
+                BEST: <span id="snakeHigh" class="font-bold text-emerald-300">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Canvas Arena -->
+          <div class="relative mt-4 rounded-2xl overflow-hidden bg-[#0c0d12]/95 border-2 border-white/20 shadow-inner flex flex-col items-center justify-center">
+            <canvas id="snakeCanvas" width="480" height="300" class="w-full max-w-[540px] h-[260px] sm:h-[320px] block cursor-crosshair"></canvas>
+
+            <!-- Overlay Start/Game Over Screen -->
+            <div id="gameOverScreen" class="absolute inset-0 bg-black/80 glass-backdrop flex flex-col items-center justify-center text-center p-6 transition-all duration-200">
+              <div class="w-14 h-14 rounded-2xl bg-coral-gradient flex items-center justify-center text-white text-2xl mb-3 shadow-lg shadow-brand-coral/40">
+                <i class="fa-solid fa-play"></i>
+              </div>
+              <h4 id="gameMessage" class="text-xl sm:text-2xl font-display font-black text-white mb-2">APOZL REACTION TEST</h4>
+              <p class="text-xs text-white/70 max-w-xs mb-5">
+                Use Keyboard Arrow Keys or on-screen directional buttons to guide the energy snake.
+              </p>
+              <button id="startGameBtn" class="px-6 py-2.5 rounded-xl bg-white text-brand-coral font-bold text-sm shadow-lg hover:scale-105 active:scale-95 transition-transform">
+                Start Game
+              </button>
+            </div>
+          </div>
+
+          <!-- Touch Controls for Mobile Devices -->
+          <div class="mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-[11px] text-white/80 flex items-center gap-2">
+              <i class="fa-solid fa-keyboard"></i>
+              <span>Desktop: Arrow Keys or W/A/S/D to move</span>
+            </div>
+
+            <!-- Virtual D-Pad for Mobile -->
+            <div class="grid grid-cols-3 gap-1.5 w-36 sm:w-40 select-none">
+              <div class="col-start-2">
+                <button id="btnUp" aria-label="Move Up" class="w-full py-2 rounded-lg bg-black/30 hover:bg-black/50 text-white active:bg-black/70 flex items-center justify-center border border-white/20">
+                  <i class="fa-solid fa-chevron-up"></i>
+                </button>
+              </div>
+              <div class="col-start-1 col-span-3 grid grid-cols-3 gap-1.5">
+                <button id="btnLeft" aria-label="Move Left" class="w-full py-2 rounded-lg bg-black/30 hover:bg-black/50 text-white active:bg-black/70 flex items-center justify-center border border-white/20">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button id="btnDown" aria-label="Move Down" class="w-full py-2 rounded-lg bg-black/30 hover:bg-black/50 text-white active:bg-black/70 flex items-center justify-center border border-white/20">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <button id="btnRight" aria-label="Move Right" class="w-full py-2 rounded-lg bg-black/30 hover:bg-black/50 text-white active:bg-black/70 flex items-center justify-center border border-white/20">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MEET OUR TEAM (Founder feature card matching mockup) -->
+  <section id="team" class="py-16 sm:py-24 border-t border-white/5 bg-[#0e1015]/60 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title Matching Wireframe -->
+      <div class="mb-10">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white uppercase">
+          MEET OUR <span class="text-brand-coral">TEAM</span>
+        </h2>
+        <div class="w-12 h-1 bg-coral-gradient rounded-full mt-2"></div>
+      </div>
+
+      <!-- Feature Card matching wireframe layout with Swaminathan Leo -->
+      <div class="relative rounded-3xl bg-coral-gradient p-1 shadow-2xl shadow-brand-coral/25 overflow-hidden">
+        <div class="bg-gradient-to-r from-brand-coral via-[#FF7540] to-[#FF9E4A] rounded-[22px] p-6 sm:p-10 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+          
+          <!-- Stylized Portrait Cutout & Identification -->
+          <div class="flex flex-col sm:flex-row items-center gap-6 z-10 w-full md:w-auto">
+            <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-[#0e1015] border-2 border-white/40 overflow-hidden shadow-2xl flex-shrink-0">
+              <img 
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" 
+                alt="Swaminathan Leo - Founder" 
+                class="w-full h-full object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
+                onerror="this.src='https://placehold.co/400x400/0e1015/ffffff?text=Swaminathan+Leo'"
+              >
+              <div class="absolute inset-0 bg-brand-coral/10 mix-blend-color"></div>
+            </div>
+
+            <div class="text-center sm:text-left">
+              <span class="inline-block px-3 py-1 rounded-full bg-black/30 border border-white/20 text-white font-mono text-xs uppercase tracking-wider mb-2">
+                Founder & Chief Architect
+              </span>
+              <h3 class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-white tracking-tight uppercase leading-none">
+                SWAMINATHAN
+              </h3>
+              <div class="text-2xl sm:text-3xl font-display font-bold text-black/80 tracking-widest uppercase mt-1">
+                LEO
+              </div>
+              <p class="text-white/85 text-xs sm:text-sm max-w-sm mt-3 leading-relaxed">
+                Directing deep-tech system architectures, autonomous robotic protocols, and boundary-pushing software engineering.
+              </p>
+              
+              <!-- Social links -->
+              <div class="flex items-center justify-center sm:justify-start space-x-3 mt-4">
+                <a href="#" aria-label="LinkedIn Profile" class="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors">
+                  <i class="fa-brands fa-linkedin-in text-xs"></i>
+                </a>
+                <a href="#" aria-label="GitHub Profile" class="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors">
+                  <i class="fa-brands fa-github text-xs"></i>
+                </a>
+                <a href="#" aria-label="X Twitter" class="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors">
+                  <i class="fa-brands fa-x-twitter text-xs"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carousel Next Indicator Arrow matching wireframe icon on right -->
+          <div class="hidden md:flex items-center">
+            <button aria-label="Next Team Member" class="w-12 h-12 rounded-full bg-white/20 hover:bg-white text-white hover:text-brand-coral border border-white/30 flex items-center justify-center transition-all shadow-lg hover:scale-110">
+              <i class="fa-solid fa-chevron-right text-base"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICATE VERIFICATION SECTION (Faithful to wireframe lower section) -->
+  <section id="verify" class="py-16 sm:py-20 border-t border-white/5 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <!-- Section Title Matching Wireframe -->
+      <div class="mb-4">
+        <h2 class="text-xl sm:text-2xl font-display font-black tracking-wide text-white uppercase">
+          CERTIFICATE <span class="text-brand-coral">VERIFICATION</span>
+        </h2>
+        <p class="text-xs text-white/50 mt-1">Authenticate training badges, internship completions, and engineering credentials issued by APOZL.</p>
+      </div>
+
+      <!-- Verification Input Bar with Interactive Validation -->
+      <form id="certForm" class="relative mt-6">
+        <div class="relative flex flex-col sm:flex-row items-center gap-3">
+          <div class="relative w-full">
+            <input 
+              type="text" 
+              id="certInput"
+              placeholder="Enter your Certificate Number (e.g., APZ-2026-9042)" 
+              class="w-full px-5 py-4 rounded-2xl bg-[#141720] border-2 border-white/10 hover:border-brand-coral/50 focus:border-brand-coral text-white placeholder-white/30 text-sm outline-none transition-all shadow-inner"
+              required
+            >
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30">
+              <i class="fa-solid fa-stamp"></i>
+            </div>
+          </div>
+          <button 
+            type="submit" 
+            class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-coral-gradient hover:opacity-95 text-white font-bold text-sm tracking-wide whitespace-nowrap shadow-lg shadow-brand-coral/30 hover:shadow-brand-coral/50 transition-all active:scale-95"
+          >
+            Verify Now
+          </button>
+        </div>
+
+        <!-- Result Box -->
+        <div id="certResult" class="hidden mt-4 p-4 rounded-2xl border text-sm transition-all duration-300"></div>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- FREQUENTLY ASKED QUESTIONS SECTION -->
+  <section id="faq" class="py-16 sm:py-24 border-t border-white/5 bg-[#0e1015]/60 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl font-display font-black tracking-wide text-white uppercase">
+          FREQUENTLY ASKED <span class="text-brand-coral">QUESTIONS</span>
+        </h2>
+        <div class="w-12 h-1 bg-coral-gradient rounded-full mx-auto mt-2"></div>
+        <p class="text-xs sm:text-sm text-white/50 mt-3">Everything you need to know about our workflow, technology stack, and partnerships.</p>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="space-y-3.5">
+        
+        <!-- FAQ 1 -->
+        <div class="faq-item rounded-2xl bg-[#141720] border border-white/10 overflow-hidden transition-all duration-200">
+          <button class="faq-trigger w-full px-6 py-4.5 text-left flex items-center justify-between text-white font-semibold text-sm sm:text-base">
+            <span>What core technologies does APOZL specialize in?</span>
+            <i class="fa-solid fa-chevron-down text-brand-coral text-xs transition-transform duration-200 faq-icon"></i>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
+            We specialize in bespoke software architectures (microservices, distributed cloud systems, real-time edge streaming), robotics control logic (ROS2, embedded sensors, inverse kinematics), and automated enterprise intelligence pipelines.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item rounded-2xl bg-[#141720] border border-white/10 overflow-hidden transition-all duration-200">
+          <button class="faq-trigger w-full px-6 py-4.5 text-left flex items-center justify-between text-white font-semibold text-sm sm:text-base">
+            <span>How does the project engagement process work?</span>
+            <i class="fa-solid fa-chevron-down text-brand-coral text-xs transition-transform duration-200 faq-icon"></i>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
+            We begin with a technical audit and rapid prototype sprint. Following architecture sign-off, our engineering pods deploy bi-weekly milestones with real-time continuous integration demos and verifiable telemetry.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item rounded-2xl bg-[#141720] border border-white/10 overflow-hidden transition-all duration-200">
+          <button class="faq-trigger w-full px-6 py-4.5 text-left flex items-center justify-between text-white font-semibold text-sm sm:text-base">
+            <span>Can APOZL assist with hardware prototyping as well as software?</span>
+            <i class="fa-solid fa-chevron-down text-brand-coral text-xs transition-transform duration-200 faq-icon"></i>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
+            Yes. Our robotics division crafts custom microcontroller firmware (STM32, ESP32, Raspberry Pi compute modules, NVIDIA Jetson) alongside CAD schematics, PCB drafting, and cross-layer software communication drivers.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item rounded-2xl bg-[#141720] border border-white/10 overflow-hidden transition-all duration-200">
+          <button class="faq-trigger w-full px-6 py-4.5 text-left flex items-center justify-between text-white font-semibold text-sm sm:text-base">
+            <span>How does Certificate Verification work?</span>
+            <i class="fa-solid fa-chevron-down text-brand-coral text-xs transition-transform duration-200 faq-icon"></i>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
+            Each credential issued to students, contributors, and engineering fellows contains a tamper-evident serial key hashed on our registry. Entering this code in the Certificate Verification section instantly confirms authenticity and honors.
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item rounded-2xl bg-[#141720] border border-white/10 overflow-hidden transition-all duration-200">
+          <button class="faq-trigger w-full px-6 py-4.5 text-left flex items-center justify-between text-white font-semibold text-sm sm:text-base">
+            <span>How do we schedule a technical consultation?</span>
+            <i class="fa-solid fa-chevron-down text-brand-coral text-xs transition-transform duration-200 faq-icon"></i>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
+            You can click the profile icon or message directly through our contact portal below. Our technical leads respond within 24 hours with NDA protection and preliminary scope estimates.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER SECTION (Expanded from wireframe 'Footer' marker) -->
+  <footer class="border-t border-brand-coral/30 bg-[#090a0d] relative pt-16 pb-12">
+    <!-- Accent line matching the wireframe coral boundary -->
+    <div class="absolute top-0 inset-x-0 h-1 bg-coral-gradient"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        
+        <!-- Brand & Mission Column -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-coral-gradient flex items-center justify-center font-display font-black text-white text-lg shadow-md shadow-brand-coral/30">
+              A
+            </div>
+            <div class="font-display font-black tracking-wider text-2xl text-white">
+              AP<span class="text-brand-coral">OZL</span>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-white/60 leading-relaxed max-w-sm">
+            Engineering extraordinary digital and robotic systems. We bridge computational science with practical industrial excellence.
+          </p>
+          <div class="flex items-center space-x-3 pt-2">
+            <a href="#" aria-label="APOZL Twitter" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-brand-coral hover:text-white text-white/70 border border-white/10 flex items-center justify-center transition-all">
+              <i class="fa-brands fa-x-twitter text-sm"></i>
+            </a>
+            <a href="#" aria-label="APOZL GitHub" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-brand-coral hover:text-white text-white/70 border border-white/10 flex items-center justify-center transition-all">
+              <i class="fa-brands fa-github text-sm"></i>
+            </a>
+            <a href="#" aria-label="APOZL LinkedIn" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-brand-coral hover:text-white text-white/70 border border-white/10 flex items-center justify-center transition-all">
+              <i class="fa-brands fa-linkedin-in text-sm"></i>
+            </a>
+            <a href="#" aria-label="APOZL YouTube" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-brand-coral hover:text-white text-white/70 border border-white/10 flex items-center justify-center transition-all">
+              <i class="fa-brands fa-youtube text-sm"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Navigation</h4>
+          <ul class="space-y-2 text-xs sm:text-sm text-white/60">
+            <li><a href="#about" class="hover:text-brand-coral transition-colors">About Us</a></li>
+            <li><a href="#services" class="hover:text-brand-coral transition-colors">Services</a></li>
+            <li><a href="#works" class="hover:text-brand-coral transition-colors">Case Studies</a></li>
+            <li><a href="#team" class="hover:text-brand-coral transition-colors">Leadership</a></li>
+            <li><a href="#verify" class="hover:text-brand-coral transition-colors">Verification</a></li>
+          </ul>
+        </div>
+
+        <!-- Capabilities -->
+        <div>
+          <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Domains</h4>
+          <ul class="space-y-2 text-xs sm:text-sm text-white/60">
+            <li><a href="#services" class="hover:text-brand-coral transition-colors">Robotic Integration</a></li>
+            <li><a href="#services" class="hover:text-brand-coral transition-colors">SaaS & Microservices</a></li>
+            <li><a href="#services" class="hover:text-brand-coral transition-colors">Process Automation</a></li>
+            <li><a href="#works" class="hover:text-brand-coral transition-colors">Edtech Ecosystems</a></li>
+            <li><a href="#works" class="hover:text-brand-coral transition-colors">Healthcare Tech</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter & Contact -->
+        <div>
+          <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Stay Informed</h4>
+          <p class="text-xs text-white/60 mb-3">Subscribe for engineering dispatches and breakthrough case studies.</p>
+          <form id="newsletterForm" class="space-y-2">
+            <input 
+              type="email" 
+              placeholder="Your email address" 
+              class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-brand-coral text-white text-xs outline-none transition-colors"
+              required
+            >
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-coral-gradient text-white font-semibold text-xs hover:opacity-90 transition-opacity">
+              Join Dispatch
+            </button>
+          </form>
+          <div id="newsletterMsg" class="hidden text-[11px] text-emerald-400 mt-1">Thanks for subscribing!</div>
+        </div>
+
+      </div>
+
+      <!-- Copyright & Legal Bottom Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-white/50 gap-4">
+        <div>
+          &copy; 2026 <strong class="text-white font-semibold">APOZL Inc.</strong> All rights reserved. Build Beyond Ordinary.
+        </div>
+        <div class="flex items-center space-x-6">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors">Security Whitepaper</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Contact/Profile Modal -->
+  <div id="profileModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 glass-backdrop">
+    <div class="bg-[#141720] border border-white/10 rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+        <h4 class="font-display font-bold text-white text-lg">Connect with APOZL</h4>
+        <button id="closeProfileBtn" class="w-8 h-8 rounded-full hover:bg-white/10 text-white/70 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="text-center py-2">
+        <div class="w-16 h-16 rounded-2xl bg-coral-gradient mx-auto flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg shadow-brand-coral/30">
+          A
+        </div>
+        <h5 class="font-display font-bold text-white text-base">Direct Client Portal</h5>
+        <p class="text-xs text-white/60 mt-1">Get in touch directly with our leadership team for RFP inquiries.</p>
+        
+        <div class="mt-6 space-y-3 text-left">
+          <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+            <i class="fa-solid fa-envelope text-brand-coral text-sm"></i>
+            <div>
+              <div class="text-[10px] text-white/40 uppercase">Direct Email</div>
+              <div class="text-xs text-white font-medium">engineering@apozl.tech</div>
+            </div>
+          </div>
+          <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+            <i class="fa-solid fa-location-dot text-brand-coral text-sm"></i>
+            <div>
+              <div class="text-[10px] text-white/40 uppercase">Global Headquarters</div>
+              <div class="text-xs text-white font-medium">Tech Corridor, Innovation Hub</div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="w-full mt-6 py-3 rounded-xl bg-coral-gradient text-white font-bold text-xs">
+          Dismiss Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* Mobile Menu Toggle */
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      const mobileLinks = document.querySelectorAll('.mobile-link');
+
+      if (mobileBtn && mobileDrawer) {
+        mobileBtn.addEventListener('click', () => {
+          mobileDrawer.classList.toggle('hidden');
+        });
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileDrawer.classList.add('hidden');
+          });
+        });
+      }
+
+      /* Modals Toggle (Video & Profile) */
+      const videoCard = document.getElementById('videoThumbnailCard');
+      const videoModal = document.getElementById('videoModal');
+      const closeVideoBtn = document.getElementById('closeVideoBtn');
+
+      if (videoCard && videoModal && closeVideoBtn) {
+        videoCard.addEventListener('click', () => {
+          videoModal.classList.remove('hidden');
+          videoModal.classList.add('flex');
+        });
+        closeVideoBtn.addEventListener('click', () => {
+          videoModal.classList.add('hidden');
+          videoModal.classList.remove('flex');
+        });
+        videoModal.addEventListener('click', (e) => {
+          if (e.target === videoModal) {
+            videoModal.classList.add('hidden');
+            videoModal.classList.remove('flex');
+          }
+        });
+      }
+
+      const profileBtn = document.getElementById('profileModalBtn');
+      const profileModal = document.getElementById('profileModal');
+      const closeProfileBtn = document.getElementById('closeProfileBtn');
+
+      if (profileBtn && profileModal && closeProfileBtn) {
+        profileBtn.addEventListener('click', () => {
+          profileModal.classList.remove('hidden');
+          profileModal.classList.add('flex');
+        });
+        closeProfileBtn.addEventListener('click', () => {
+          profileModal.classList.add('hidden');
+          profileModal.classList.remove('flex');
+        });
+        profileModal.addEventListener('click', (e) => {
+          if (e.target === profileModal) {
+            profileModal.classList.add('hidden');
+            profileModal.classList.remove('flex');
+          }
+        });
+      }
+
+      /* FAQ Accordion Logic */
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        const content = item.querySelector('.faq-content');
+        const icon = item.querySelector('.faq-icon');
+
+        trigger.addEventListener('click', () => {
+          const isOpen = !content.classList.contains('hidden');
+          
+          // Close others
+          faqItems.forEach(other => {
+            other.querySelector('.faq-content').classList.add('hidden');
+            other.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+          });
+
+          if (!isOpen) {
+            content.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+
+      /* Certificate Verification Mock Logic */
+      const certForm = document.getElementById('certForm');
+      const certInput = document.getElementById('certInput');
+      const certResult = document.getElementById('certResult');
+
+      const mockCertDatabase = {
+        'APZ-2026-9042': { name: 'Swaminathan Leo', course: 'Advanced Autonomous Systems & Robotics', status: 'Verified & Active', date: 'January 2026' },
+        'APZ-ROBOT-01': { name: 'Alex Rivera', course: 'Edge AI & Micro-Kinematics Mastery', status: 'Verified & Active', date: 'March 2026' },
+        'APZ-CLOUD-02': { name: 'Priya Sharma', course: 'Cloud Infrastructure & High-Scale Microservices', status: 'Verified & Active', date: 'April 2026' }
+      };
+
+      if (certForm) {
+        certForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const query = certInput.value.trim().toUpperCase();
+          certResult.classList.remove('hidden');
+
+          if (mockCertDatabase[query]) {
+            const data = mockCertDatabase[query];
+            certResult.className = 'mt-4 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm';
+            certResult.innerHTML = `
+              <div class="flex items-center space-x-2 font-bold text-emerald-400 mb-1">
+                <i class="fa-solid fa-circle-check text-base"></i>
+                <span>Credential Confirmed: ${query}</span>
+              </div>
+              <p><strong>Recipient:</strong> ${data.name}</p>
+              <p><strong>Specialization:</strong> ${data.course}</p>
+              <p><strong>Issued:</strong> ${data.date} &bull; <strong>Status:</strong> ${data.status}</p>
+            `;
+          } else {
+            certResult.className = 'mt-4 p-4 rounded-2xl bg-brand-coral/10 border border-brand-coral/40 text-rose-200 text-xs sm:text-sm';
+            certResult.innerHTML = `
+              <div class="flex items-center space-x-2 font-bold text-brand-coral mb-1">
+                <i class="fa-solid fa-circle-exclamation text-base"></i>
+                <span>Credential "${query}" Not Found</span>
+              </div>
+              <p class="text-white/70">Please check your code formatting or try demo certificate: <strong>APZ-2026-9042</strong> or <strong>APZ-ROBOT-01</strong>.</p>
+            `;
+          }
+        });
+      }
+
+      /* Newsletter Form */
+      const newsletterForm = document.getElementById('newsletterForm');
+      const newsletterMsg = document.getElementById('newsletterMsg');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          newsletterMsg.classList.remove('hidden');
+          newsletterForm.reset();
+          setTimeout(() => {
+            newsletterMsg.classList.add('hidden');
+          }, 4000);
+        });
+      }
+
+      /* Interactive Snake Game Engine */
+      const canvas = document.getElementById('snakeCanvas');
+      const ctx = canvas.getContext('2d');
+      const scoreEl = document.getElementById('snakeScore');
+      const highEl = document.getElementById('snakeHigh');
+      const gameOverScreen = document.getElementById('gameOverScreen');
+      const gameMessage = document.getElementById('gameMessage');
+      const startBtn = document.getElementById('startGameBtn');
+
+      // Grid specifications
+      const gridSize = 20;
+      const tileCountX = canvas.width / gridSize;
+      const tileCountY = canvas.height / gridSize;
+
+      let snake = [];
+      let food = { x: 5, y: 5 };
+      let dx = 1;
+      let dy = 0;
+      let nextDx = 1;
+      let nextDy = 0;
+      let score = 0;
+      let highScore = localStorage.getItem('apozl_snake_high') || 0;
+      highEl.innerText = highScore;
+      let gameInterval = null;
+      let isPlaying = false;
+
+      function resetGame() {
+        snake = [
+          { x: 10, y: 7 },
+          { x: 9, y: 7 },
+          { x: 8, y: 7 }
+        ];
+        dx = 1;
+        dy = 0;
+        nextDx = 1;
+        nextDy = 0;
+        score = 0;
+        scoreEl.innerText = score;
+        spawnFood();
+      }
+
+      function spawnFood() {
+        let valid = false;
+        while (!valid) {
+          food.x = Math.floor(Math.random() * tileCountX);
+          food.y = Math.floor(Math.random() * tileCountY);
+          valid = !snake.some(segment => segment.x === food.x && segment.y === food.y);
+        }
+      }
+
+      function draw() {
+        // Clear canvas with deep dark background
+        ctx.fillStyle = '#0c0d12';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw faint cyber grid lines
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        // Draw food with glowing gradient
+        ctx.fillStyle = '#FFB800';
+        ctx.shadowColor = '#FFB800';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2, gridSize / 2 - 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Draw snake
+        snake.forEach((segment, index) => {
+          if (index === 0) {
+            // Head
+            ctx.fillStyle = '#FF4E3E';
+            ctx.shadowColor = '#FF4E3E';
+            ctx.shadowBlur = 12;
+          } else {
+            // Body with gradient falloff
+            ctx.fillStyle = '#FF8A3D';
+            ctx.shadowBlur = 0;
+          }
+
+          const radius = index === 0 ? 5 : 3;
+          const x = segment.x * gridSize + 1;
+          const y = segment.y * gridSize + 1;
+          const w = gridSize - 2;
+          const h = gridSize - 2;
+
+          ctx.beginPath();
+          ctx.roundRect ? ctx.roundRect(x, y, w, h, radius) : ctx.rect(x, y, w, h);
+          ctx.fill();
+        });
+        ctx.shadowBlur = 0;
+      }
+
+      function update() {
+        dx = nextDx;
+        dy = nextDy;
+
+        const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+        // Wall collisions (wrapped or terminal)
+        if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
+          handleGameOver();
+          return;
+        }
+
+        // Self collision
+        if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+          handleGameOver();
+          return;
+        }
+
+        snake.unshift(head);
+
+        // Food collision
+        if (head.x === food.x && head.y === food.y) {
+          score += 10;
+          scoreEl.innerText = score;
+          if (score > highScore) {
+            highScore = score;
+            highEl.innerText = highScore;
+            localStorage.setItem('apozl_snake_high', highScore);
+          }
+          spawnFood();
+        } else {
+          snake.pop();
+        }
+
+        draw();
+      }
+
+      function handleGameOver() {
+        clearInterval(gameInterval);
+        isPlaying = false;
+        gameMessage.innerText = `GAME OVER — SCORE: ${score}`;
+        startBtn.innerText = 'Play Again';
+        gameOverScreen.classList.remove('hidden');
+      }
+
+      function startGame() {
+        resetGame();
+        isPlaying = true;
+        gameOverScreen.classList.add('hidden');
+        if (gameInterval) clearInterval(gameInterval);
+        gameInterval = setInterval(update, 110);
+        draw();
+      }
+
+      startBtn.addEventListener('click', startGame);
+
+      // Keyboard Controls
+      window.addEventListener('keydown', (e) => {
+        if (!isPlaying) return;
+        switch (e.key) {
+          case 'ArrowUp':
+          case 'w':
+          case 'W':
+            if (dy === 0) { nextDx = 0; nextDy = -1; }
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+          case 's':
+          case 'S':
+            if (dy === 0) { nextDx = 0; nextDy = 1; }
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+          case 'a':
+          case 'A':
+            if (dx === 0) { nextDx = -1; nextDy = 0; }
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+          case 'd':
+          case 'D':
+            if (dx === 0) { nextDx = 1; nextDy = 0; }
+            e.preventDefault();
+            break;
+        }
+      });
+
+      // Virtual D-pad for mobile
+      document.getElementById('btnUp').addEventListener('click', () => {
+        if (dy === 0) { nextDx = 0; nextDy = -1; }
+      });
+      document.getElementById('btnDown').addEventListener('click', () => {
+        if (dy === 0) { nextDx = 0; nextDy = 1; }
+      });
+      document.getElementById('btnLeft').addEventListener('click', () => {
+        if (dx === 0) { nextDx = -1; nextDy = 0; }
+      });
+      document.getElementById('btnRight').addEventListener('click', () => {
+        if (dx === 0) { nextDx = 1; nextDy = 0; }
+      });
+
+      // Initial Canvas Render
+      resetGame();
+      draw();
+    });
+  </script>
+</body>
+</html>
